@@ -8,6 +8,7 @@ import tiktoken
 import yaml
 
 from shortGPT.config.api_db import ApiKeyManager
+from shortGPT.gpt import ollama
 
 
 def num_tokens_from_messages(texts, model="gpt-3.5-turbo-0301"):
@@ -70,6 +71,25 @@ def open_file(filepath):
 
 
 def gpt3Turbo_completion(chat_prompt="", system="You are an AI that can give the answer to anything", temp=0.7, model="gpt-3.5-turbo", max_tokens=1000, remove_nl=True, conversation=None):
+    if os.getenv("USE_OLLAMA", "1") == "1":
+        ollama_base_url = os.getenv("OLLAMA_BASE_URL", "http://warp-gpu:11434")
+        ollama_model = os.getenv("OLLAMA_MODEL", "mixtral:latest")
+        if conversation:
+            messages = conversation
+            return ollama.ollama_generate(ollama_base_url,
+                ollama_model, json.dumps(messages), options={
+                    'temperature': temp
+                })['response']
+        else:
+            return ollama.ollama_generate(ollama_base_url,
+                ollama_model, chat_prompt, system=system, options={
+                    'temperature': temp
+                }, raw=False)['response']
+    else:
+        return gpt3Turbo_completion_internal(chat_prompt=chat_prompt, system=system, temp=temp, model=model, max_tokens=max_tokens, remove_nl=remove_nl, conversation=conversation)
+
+
+def gpt3Turbo_completion_internal(chat_prompt="", system="You are an AI that can give the answer to anything", temp=0.7, model="gpt-3.5-turbo", max_tokens=1000, remove_nl=True, conversation=None):
     openai.api_key = ApiKeyManager.get_api_key("OPENAI")
     max_retry = 5
     retry = 0
