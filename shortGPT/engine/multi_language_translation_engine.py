@@ -51,6 +51,9 @@ class MultiLanguageTranslationEngine(AbstractContentEngine):
             whispered = audioToText(video_audio, model_size='base')
             self._db_speech_blocks = getSpeechBlocks(whispered, silence_time=0.8)
             self._db_original_language = whispered['language']
+        else:
+            self._db_speech_blocks = cached_translation['speech_blocks']
+            self._db_original_language = cached_translation['original_language']
         
         if (ACRONYM_LANGUAGE_MAPPING.get(self._db_original_language) == Language(self._db_target_language)):
             self._db_translated_timed_sentences = self._db_speech_blocks
