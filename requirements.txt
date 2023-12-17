@@ -1,5 +1,7 @@
 ffmpeg~=1.4
 ffmpeg-python
+google-cloud-translate~=2.0.1
+iso639-lang~=2.2.2
 python-dotenv~=1.0.0
 gradio==3.38.0
 openai==0.28.1

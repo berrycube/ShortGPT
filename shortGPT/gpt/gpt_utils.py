@@ -8,7 +8,7 @@ import tiktoken
 import yaml
 
 from shortGPT.config.api_db import ApiKeyManager
-from shortGPT.gpt import ollama
+from shortGPT.third_party import ollama
 
 
 def num_tokens_from_messages(texts, model="gpt-3.5-turbo-0301"):
