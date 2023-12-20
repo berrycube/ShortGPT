@@ -26,3 +26,5 @@ PyYAML~=6.0.1
 pandas~=2.1.4
 tqdm~=4.66.1
 numpy~=1.26.2
+silero~=0.4.1
+onnxruntime~=1.16.3
